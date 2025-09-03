@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server.js",
+    "start:back": "nodemon ./server.js",
+    "start:front": "cd ../frontend && yarn run start",
+    "dev": "concurrently --kill-others-on-fail \"yarn run start:back\" \"yarn run start:front\""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@babel/cli": "^7.28.3",
+    "@babel/node": "^7.28.0",
+    "@babel/preset-env": "^7.28.3",
+    "@supabase/supabase-js": "^2.57.0",
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  },
+  "type": "module"
+}
