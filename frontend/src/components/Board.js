@@ -56,7 +56,7 @@ function Board() {
                         {boards.map(board => (
                             <tr key={board.id} className='listItem' onClick={()=>goToDetail(board.id)}>
                                 {/* <td className='listId' style={{ display: 'none' }}>{board.id}</td> */}
-                                <td className='listTitle'>{board.title}</td>
+                                <td className='listTitle'>{board.title + (board.update_at ? "(수정됨)" : "")}</td>
                                 <td className='listWriter'>{board.writer}</td>
                                 {/* <td className='listDate'>{board.date}</td> */}
                                 <td className='listViews'>{board.views}</td>

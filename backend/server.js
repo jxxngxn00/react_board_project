@@ -88,7 +88,7 @@ app.put('/api/edit/:id', async (req, res) => {
 
     const { data, error } = await supabase
         .from('board')
-        .update({ writer: writer, title: title + "(수정됨)", 
+        .update({ writer: writer, title: title, 
             content: content, update_at: new Date() })
         .eq('id', postId);
     if (error) return res.status(500).json({ error: error.message });

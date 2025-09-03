@@ -38,7 +38,7 @@ function BoardDetail() {
           <span className='id' style={{ display: 'none' }}>{board.id}</span>
           <S.BoardHeadDetail className='boardDetailHead'>
             <div className='info'>
-              <div className='title'>{board.title}</div>
+              <div className='title'>{board.title + (board.update_at ? "(수정됨)" : "")}</div>
               <div className='writer'>{board.writer}</div>
             </div>
             <div className='extraInfo'>
