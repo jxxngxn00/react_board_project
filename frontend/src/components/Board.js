@@ -11,14 +11,20 @@ function Board() {
 
     // 게시글 목록 조회
     useEffect(() => {
-        fetch(`http://localhost:3001/api/boards/?page=${page}&limit=10`)
-            .then(response => response.json())
-            .then(data => {
-                setBoards(data.data);
-                setTotalPages(data.totalPages);
-            })
-            .catch(error => console.error('Error fetching boards:', error));
+        fetchBoards();
+        // eslint-disable-next-line 
     }, [page]);
+
+    // 게시글 조회
+    const fetchBoards = async () => {
+        fetch(`http://localhost:3001/api/boards/?page=${page}&limit=10`)
+        .then(response => response.json())
+        .then(data => {
+            setBoards(data.data);
+            setTotalPages(data.totalPages);
+        })
+        .catch(error => console.error('Error fetching boards:', error));
+    };
 
     // 게시글 등록으로 이동하기
     const Post = () => {
@@ -27,7 +33,7 @@ function Board() {
 
     const goToDetail = async (id) => {
         // 조회수 증가
-        fetch('/api/increaseViews/' + id, {
+        await fetch('/api/increaseViews/' + id, {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -36,6 +42,9 @@ function Board() {
         })
         .then(res => res.json()).then(data => console.log(data))
         .catch(err => console.log(err));
+
+        // 업데이트된 조회수 반영하여 다시 게시글 불러오기
+        fetchBoards();
 
         // 상세 페이지로 이동
         navigate(`/board/${id}`);
