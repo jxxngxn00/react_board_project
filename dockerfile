@@ -22,4 +22,4 @@ COPY --from=builder /app/frontend/build ./backend/public
 
 WORKDIR /app/backend
 EXPOSE 3001
-CMD ["npm", "start"]
+CMD ["yarn", "dev"]
