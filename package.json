@@ -1,0 +1,26 @@
+{
+  "name": "react_board_project",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "board" : "cd ./backend && yarn run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jxxngxn00/react_board_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jxxngxn00/react_board_project/issues"
+  },
+  "homepage": "https://github.com/jxxngxn00/react_board_project#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
+}
