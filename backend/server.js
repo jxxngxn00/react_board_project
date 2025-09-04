@@ -19,14 +19,6 @@ app.use(cors({
     credentials: true,
 }));
 
-
-// 임시
-app.post('/api/data', (req, res) => {
-    const data = req.body;
-    console.log('Received data:', data);
-    res.status(200).send({ message: 'Data received successfully', data });
-});
-
 // 게시글 등록
 app.post('/api/post', async (req, res) => {
     const { writer, title, content } = req.body;
@@ -41,19 +33,41 @@ app.post('/api/post', async (req, res) => {
     res.status(200).send({ message: 'Post created successfully' });
 });
 
-// 게시글 목록 조회
+// 게시글 목록 조회 + 페이지네이션
 app.get('/api/boards', async (req, res) => {
+    const page = parseInt(req.query.page) || 1; // 기본값은 1페이지
+    const limit = parseInt(req.query.limit) || 10; // 기본값은 페이지당 10개 게시글
+    const offset = (page - 1) * limit;  // 건너뛸 게시글 수
     try{
-        let { data, error } = await supabase.from('board').select('*');
+
+        // 데이터 가져오기
+        let { data, error } = await supabase.from('board')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .order('id', { ascending : false })
+        .range(offset, offset + limit - 1); // 범위 지정 (0부터 시작)
         if (error) {
-            return res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: error.message });  
         }
-        // console.log(data);
-        res.status(200).json(data);
+
+        // 총 개수 가져오기
+        let { count, error: countError } = await supabase.from('board')
+        .select('*', { count: 'exact', head: true });
+        if (countError) {
+            return res.status(500).json({ error: countError.message });  
+        }   
+
+        const totalPages = Math.ceil(count / limit); // 총 페이지 수 계산
+        const isLastPage = page >= totalPages; // 마지막 페이지 여부
+        res.status(200).json({data, page, totalPages, isLastPage,
+            totalCount: count
+        });
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // 게시글 상세 조회
 app.get('/api/boardDetail/:id', async (req, res) => {
@@ -93,7 +107,7 @@ app.put('/api/edit/:id', async (req, res) => {
         .eq('id', postId);
     if (error) return res.status(500).json({ error: error.message });
 
-    console.log(`Update Post ${postId}:`, { writer, title, content });
+    // console.log(`Update Post ${postId}:`, { writer, title, content });
     // res.status(200).send({ message: 'Post updated successfully' });
 });
 
@@ -107,7 +121,7 @@ app.delete('/api/delete/:id', async (req, res) => {
         .eq('id', postId);
     if (error) return res.status(500).json({ error: error.message });
 
-    console.log(`Delete Post ${postId}`);
+    // console.log(`Delete Post ${postId}`);
     // res.status(200).send({ message: 'Post deleted successfully' });
 });
 

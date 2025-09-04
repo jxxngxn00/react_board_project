@@ -1,19 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as S from './styledComponents';
 import { Button, Table } from 'react-bootstrap';
 
 function Board() {
     const navigate = useNavigate();
-    const [boards, setBoards] = React.useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [boards, setBoards] = useState([]);
 
     // 게시글 목록 조회
     useEffect(() => {
-        fetch('http://localhost:3001/api/boards')
+        fetch(`http://localhost:3001/api/boards/?page=${page}&limit=10`)
             .then(response => response.json())
-            .then(data => setBoards(data))
+            .then(data => {
+                setBoards(data.data);
+                setTotalPages(data.totalPages);
+            })
             .catch(error => console.error('Error fetching boards:', error));
-    }, []);
+    }, [page]);
 
     // 게시글 등록으로 이동하기
     const Post = () => {
@@ -40,6 +45,9 @@ function Board() {
     <>
         <S.BoardList className='boardList'>
             <S.BoardHead className='boardHead'>게시판</S.BoardHead>
+            <S.BoardBtn className='boardBtn'>
+                <Button variant="outline-primary" size='lg' onClick={Post}>글쓰기</Button>
+            </S.BoardBtn>
             
             <div className='boardListContainer'>
                 <Table bordered hover>
@@ -56,7 +64,7 @@ function Board() {
                         {boards.map(board => (
                             <tr key={board.id} className='listItem' onClick={()=>goToDetail(board.id)}>
                                 {/* <td className='listId' style={{ display: 'none' }}>{board.id}</td> */}
-                                <td className='listTitle'>{board.title + (board.update_at ? "(수정됨)" : "")}</td>
+                                <td className='listTitle'>{board.title + (board.update_at ? " (수정됨)" : "")}</td>
                                 <td className='listWriter'>{board.writer}</td>
                                 {/* <td className='listDate'>{board.date}</td> */}
                                 <td className='listViews'>{board.views}</td>
@@ -67,9 +75,27 @@ function Board() {
                 </Table>
             </div>
 
-            <S.BoardBtn className='boardBtn'>
-                <Button variant="outline-primary" size='lg' onClick={Post}>글쓰기</Button>
-            </S.BoardBtn>
+            {/* 페이지네이션 */}
+            <S.Pagination className='pagination'>
+                <Button variant='outline-secondary' size='sm' className='prevBtn' 
+                    onClick={() => setPage( p => Math.max(p-1, 1))}>이전</Button>
+                
+                { Array.from({ length: totalPages }, (_, i) => (
+                    <Button 
+                        key={i + 1} 
+                        variant={page === i + 1 ? 'primary' : 'outline-primary'}
+                        size='sm'
+                        onClick={() => setPage(i + 1)}
+                    >
+                        {i + 1}
+                    </Button>
+                ))}
+
+                <Button variant='outline-secondary' size='sm' className='nextBtn' 
+                onClick={() => setPage( p => Math.min(p + 1, totalPages))}>다음</Button>
+            </S.Pagination>
+
+            
         </S.BoardList>
     </>
   )
