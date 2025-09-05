@@ -1,25 +1,27 @@
-# 1단계: 프론트 빌드
-FROM node:18 as builder
-WORKDIR /app
-COPY frontend/package*.json ./frontend/
-RUN cd frontend && npm install
-COPY frontend ./frontend
-RUN cd frontend && npm run build
+# Node.js LTS 이미지
+FROM node:20
 
-# 2단계: 백엔드 실행 + 프론트 정적 파일 제공
-FROM node:18
+# 작업 디렉토리
 WORKDIR /app
 
-# 백엔드 설치
-COPY backend/package*.json ./backend/
-RUN cd backend && npm install
+# 루트 package.json, yarn.lock 복사
+COPY package.json yarn.lock ./
 
-# 소스 복사
+# backend, frontend 복사
 COPY backend ./backend
+COPY backend/.env ./backend/.env
+COPY frontend ./frontend
 
-# 프론트 빌드 결과물을 백엔드 public 폴더에 넣기
-COPY --from=builder /app/frontend/build ./backend/public
-
+# backend 의존성 설치
 WORKDIR /app/backend
-EXPOSE 3001
-CMD ["yarn", "dev"]
+RUN yarn install
+
+# frontend 의존성 설치
+WORKDIR /app/frontend
+RUN yarn install
+
+# 다시 루트로 이동
+WORKDIR /app
+
+# 실행 (board 스크립트 -> backend dev -> concurrently)
+CMD ["yarn", "board"]
