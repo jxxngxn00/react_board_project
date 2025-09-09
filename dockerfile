@@ -9,7 +9,8 @@ COPY package.json yarn.lock ./
 
 # backend, frontend 복사
 COPY backend ./backend
-COPY backend/.env ./backend/.env
+
+# COPY backend/.env ./backend/.env
 COPY frontend ./frontend
 
 # backend 의존성 설치
