@@ -138,9 +138,9 @@ app.delete('/api/delete/:id', async (req, res) => {
     // res.status(200).send({ message: 'Post deleted successfully' });
 });
 // API가 아닌 모든 요청 -> React 앱의 index.html 반환
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-})
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+// })
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
