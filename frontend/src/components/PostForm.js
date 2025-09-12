@@ -24,6 +24,7 @@ function PostForm() {
         .then(res => res.json()).then(data => console.log(data))
         .catch(err => console.log(err));
         
+        alert("글이 등록되었습니다.");
         // 등록 후 게시판 목록으로 이동
         navigate("/");
     }

@@ -36,9 +36,10 @@ function PostEditForm() {
         })
         .then(res => res.json()).then(data => console.log(data))
         .catch(err => console.log(err));
-
+        
+        alert("글이 수정되었습니다.");
         // 수정 후 게시판 목록으로 이동
-        navigate("/");
+        navigate("/board/" + param.id );
     }
     // 게시판 목록으로 돌아가기
     const backToBoard = () => {
@@ -79,7 +80,6 @@ function PostEditForm() {
                 <Button variant="secondary" onClick={backToBoard} className='cancelBtn'>취소</Button>
             </S.BtnGroup>
         </S.InputDiv>
-
     </S.BoardList>
   )
 }

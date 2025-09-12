@@ -18,6 +18,8 @@ function BoardDetail() {
 
   // 게시글 삭제
   const deletePost = () => {
+    const result = window.confirm("글을 삭제합니다. 계속하시겠습니까?");
+    if (!result) return;
     fetch('/api/delete/' + param.id, {
         method: 'DELETE',
         credentials: 'include',
@@ -27,7 +29,7 @@ function BoardDetail() {
     })
     .then(res => res.json()).then(data => console.log(data))
     .catch(err => console.log(err));
-    // 삭제 후 게시판 목록으로 이동
+    alert("글이 삭제되었습니다.");
     navigate("/");
   }
 

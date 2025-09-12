@@ -8,6 +8,7 @@ function Board() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [boards, setBoards] = useState([]);
+    const [limit, setLimit] = useState(10);
 
     // 게시글 목록 조회
     useEffect(() => {
@@ -57,7 +58,7 @@ function Board() {
             <S.BoardBtn className='boardBtn'>
                 <Button variant="outline-primary" size='lg' onClick={Post}>글쓰기</Button>
             </S.BoardBtn>
-            
+            <input type="hidden" value={limit} onChange={(e) => setLimit(e.target.value)} />
             <div className='boardListContainer'>
                 <Table bordered hover>
                     <thead>
